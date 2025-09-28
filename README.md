@@ -1,0 +1,1 @@
+Web based app for audio steganography for MP3 files that supports both embedding and extraction with n-LSB and Extended Vigenere Cypher

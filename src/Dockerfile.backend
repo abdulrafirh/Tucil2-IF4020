@@ -1,0 +1,24 @@
+# Use a slim Python image for a smaller container size
+FROM python:3.9-slim
+
+# Set the working directory
+WORKDIR /app
+
+# Set the PYTHONPATH to ensure imports work correctly from the root
+ENV PYTHONPATH /app
+
+# Copy only the requirements file first to leverage Docker's build cache
+COPY backend/requirements.txt .
+
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the rest of the backend application code
+COPY backend/ .
+
+# Expose the port the app runs on
+EXPOSE 8080
+
+# The command to run the application. Flask will automatically find the app
+# specified in .flaskenv and run in development mode on all network interfaces.
+CMD ["flask", "run", "--host=0.0.0.0","--port=8080"]
