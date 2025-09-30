@@ -1,28 +1,29 @@
 services:
   backend:
+    container_name: Tucil2-IF4020-backend
     build:
-      context: .
-      dockerfile: Dockerfile.backend
+      context: ./backend
+      dockerfile: ../Dockerfile.backend
     ports:
       - "8080:8080"
     volumes:
-      - ./backend:/app # Mounts your local backend code into the container for live updates
+      - ./backend:/app
     env_file:
       - ./backend/.flaskenv
     restart: always
 
   frontend:
+    container_name: Tucil2-IF4020-frontend
     build:
-      context: .
-      dockerfile: Dockerfile.frontend
+      context: ./frontend
+      dockerfile: ../Dockerfile.frontend
     ports:
       - "5173:5173"
     volumes:
-      - ./frontend:/app # Mounts local frontend code
-      - /app/node_modules # Prevents local node_modules from overwriting the container's
+      - ./frontend:/app
+      - /app/node_modules
     depends_on:
       - backend
     restart: always
-    # The following are often needed for Create React App hot-reloading
     stdin_open: true
     tty: true

@@ -1,20 +1,12 @@
-# Use a slim Python image for a smaller container size
 FROM python:3.9-slim
 
-# Set the working directory
 WORKDIR /app
-
-# Set the PYTHONPATH to ensure imports work correctly from the root
 ENV PYTHONPATH /app
 
-# Copy only the requirements file first to leverage Docker's build cache
-COPY backend/requirements.txt .
-
-# Install dependencies
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the backend application code
-COPY backend/ .
+COPY . .
 
 # Expose the port the app runs on
 EXPOSE 8080
