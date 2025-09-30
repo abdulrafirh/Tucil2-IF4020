@@ -1,70 +1,215 @@
+/* --- Foundational Imports --- */
 @import "tailwindcss";
+@import "tw-animate-css";
 
+/* --- Global Configuration --- */
+@custom-variant dark (&:is(.dark *));
+
+/* --- Global Theme & Color Palette --- */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  /* Enhanced elegant green light theme with better contrast and multiple shades */
+  --background: oklch(0.98 0.015 140);
+  --foreground: oklch(0.12 0.03 140);
+  --card: oklch(0.985 0.012 140);
+  --card-foreground: oklch(0.15 0.03 140);
+  --popover: oklch(0.985 0.012 140);
+  --popover-foreground: oklch(0.15 0.03 140);
+  --primary: oklch(0.35 0.18 140);
+  --primary-foreground: oklch(0.98 0.01 140);
+  --secondary: oklch(0.88 0.04 140);
+  --secondary-foreground: oklch(0.25 0.05 140);
+  --muted: oklch(0.92 0.025 140);
+  --muted-foreground: oklch(0.45 0.08 140);
+  --accent: oklch(0.42 0.15 160);
+  --accent-foreground: oklch(0.98 0.01 140);
+  --destructive: oklch(0.55 0.2 15);
+  --destructive-foreground: oklch(0.98 0.01 140);
+  --border: oklch(0.85 0.04 140);
+  --input: oklch(0.94 0.02 140);
+  --ring: oklch(0.35 0.18 140);
+  --chart-1: oklch(0.4 0.2 140);
+  --chart-2: oklch(0.5 0.18 160);
+  --chart-3: oklch(0.3 0.22 120);
+  --chart-4: oklch(0.6 0.15 180);
+  --chart-5: oklch(0.25 0.25 100);
+  --radius: 0.75rem;
+  --sidebar: oklch(0.96 0.02 140);
+  --sidebar-foreground: oklch(0.15 0.03 140);
+  --sidebar-primary: oklch(0.35 0.18 140);
+  --sidebar-primary-foreground: oklch(0.98 0.01 140);
+  --sidebar-accent: oklch(0.88 0.04 140);
+  --sidebar-accent-foreground: oklch(0.25 0.05 140);
+  --sidebar-border: oklch(0.85 0.04 140);
+  --sidebar-ring: oklch(0.35 0.18 140);
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  /* Additional green shades for more variety */
+  --green-50: oklch(0.97 0.02 140);
+  --green-100: oklch(0.94 0.04 140);
+  --green-200: oklch(0.88 0.08 140);
+  --green-300: oklch(0.75 0.12 140);
+  --green-400: oklch(0.6 0.15 140);
+  --green-500: oklch(0.45 0.18 140);
+  --green-600: oklch(0.35 0.18 140);
+  --green-700: oklch(0.28 0.16 140);
+  --green-800: oklch(0.22 0.14 140);
+  --green-900: oklch(0.15 0.12 140);
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+.dark {
+  --background: oklch(0.08 0.02 140);
+  --foreground: oklch(0.95 0.01 140);
+  --card: oklch(0.1 0.02 140);
+  --card-foreground: oklch(0.95 0.01 140);
+  --popover: oklch(0.1 0.02 140);
+  --popover-foreground: oklch(0.95 0.01 140);
+  --primary: oklch(0.6 0.15 140);
+  --primary-foreground: oklch(0.08 0.02 140);
+  --secondary: oklch(0.15 0.03 140);
+  --secondary-foreground: oklch(0.95 0.01 140);
+  --muted: oklch(0.15 0.03 140);
+  --muted-foreground: oklch(0.65 0.05 140);
+  --accent: oklch(0.15 0.03 140);
+  --accent-foreground: oklch(0.95 0.01 140);
+  --destructive: oklch(0.5 0.2 15);
+  --destructive-foreground: oklch(0.95 0.01 140);
+  --border: oklch(0.15 0.03 140);
+  --input: oklch(0.15 0.03 140);
+  --ring: oklch(0.6 0.15 140);
+  --chart-1: oklch(0.6 0.18 140);
+  --chart-2: oklch(0.7 0.15 160);
+  --chart-3: oklch(0.5 0.2 120);
+  --chart-4: oklch(0.75 0.12 180);
+  --chart-5: oklch(0.45 0.25 100);
+  --sidebar: oklch(0.12 0.02 140);
+  --sidebar-foreground: oklch(0.95 0.01 140);
+  --sidebar-primary: oklch(0.6 0.15 140);
+  --sidebar-primary-foreground: oklch(0.08 0.02 140);
+  --sidebar-accent: oklch(0.15 0.03 140);
+  --sidebar-accent-foreground: oklch(0.95 0.01 140);
+  --sidebar-border: oklch(0.15 0.03 140);
+  --sidebar-ring: oklch(0.6 0.15 140);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+/* --- Base Element Styles & Resets --- */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
   }
-  a:hover {
-    color: #747bff;
+  body {
+    @apply bg-background text-foreground;
   }
-  button {
-    background-color: #f9f9f9;
-  }
+}
+
+/* --- Global Browser Chrome Styles --- */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--secondary);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--primary), var(--accent));
+  border-radius: 5px;
+  border: 2px solid var(--background);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--accent), var(--chart-1));
+}
+
+/* --- Reusable Animation & Effect Utilities --- */
+.glow-green {
+  box-shadow: 0 0 20px var(--primary) / 20, 0 0 40px var(--primary) / 10, inset 0 1px 0 var(--primary) / 20;
+}
+.glow-green-strong {
+  box-shadow: 0 0 30px var(--primary) / 40, 0 0 60px var(--primary) / 20, 0 0 90px var(--primary) / 10, inset 0 1px 0
+    var(--primary) / 30;
+}
+.glow-green-hover {
+  transition: all 0.3s ease;
+}
+.glow-green-hover:hover {
+  box-shadow: 0 0 25px var(--accent) / 30, 0 0 50px var(--accent) / 15, inset 0 1px 0 var(--accent) / 25;
+  transform: translateY(-2px);
+}
+@keyframes slideUp { from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes slideLeft { from { opacity: 0; transform: translateX(30px) scale(0.95); } to { opacity: 1; transform: translateX(0) scale(1); } }
+.slide-up { animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+.slide-down { animation: slideDown 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+.slide-left { animation: slideLeft 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+@keyframes pulse-green { 0%, 100% { box-shadow: 0 0 0 0 var(--primary) / 40; background-color: var(--primary); } 50% { box-shadow: 0 0 0 15px var(--primary) / 0; background-color: var(--accent); } }
+.pulse-green { animation: pulse-green 2s infinite; }
+@keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+@keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+@keyframes bounce-in { 0% { opacity: 0; transform: scale(0.3) rotate(-10deg); } 50% { opacity: 1; transform: scale(1.05) rotate(5deg); } 70% { transform: scale(0.9) rotate(-2deg); } 100% { opacity: 1; transform: scale(1) rotate(0deg); } }
+@keyframes ripple { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(4); opacity: 0; } }
+.float { animation: float 3s ease-in-out infinite; }
+.rotate { animation: rotate 2s linear infinite; }
+.shimmer { background: linear-gradient(90deg, transparent, var(--primary) / 20, transparent); background-size: 200% 100%; animation: shimmer 2s infinite; }
+.bounce-in { animation: bounce-in 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+.ripple { position: relative; overflow: hidden; }
+.ripple::before { content: ""; position: absolute; top: 50%; left: 50%; width: 0; height: 0; border-radius: 50%; background: var(--primary) / 20; transform: translate(-50%, -50%); animation: ripple 0.6s linear; }
+@keyframes content-appear { 0% { opacity: 0; transform: translateY(20px) scale(0.95); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+.content-appear { animation: content-appear 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+
+/* --- Reusable Component Styles (Globally Available) --- */
+/* In a larger app, these would be in their own files, e.g., Button.css */
+@keyframes button-glow { 0%, 100% { box-shadow: 0 0 20px var(--primary) / 30, 0 0 40px var(--primary) / 15; } 50% { box-shadow: 0 0 30px var(--primary) / 50, 0 0 60px var(--primary) / 25; } }
+@keyframes button-pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+.btn-creative { position: relative; overflow: hidden; background: linear-gradient(135deg, var(--primary), var(--accent)); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+.btn-creative::before { content: ""; position: absolute; top: 50%; left: 50%; width: 0; height: 0; background: rgba(255, 255, 255, 0.3); border-radius: 50%; transform: translate(-50%, -50%); transition: width 0.6s, height 0.6s; }
+.btn-creative:hover::before { width: 300px; height: 300px; }
+.btn-creative:hover { transform: translateY(-2px) scale(1.02); animation: button-glow 2s infinite; }
+.btn-creative:active { animation: button-pulse 0.3s ease-in-out; }
+
+/* --- Enhanced responsive utilities --- */
+@media (max-width: 768px) {
+  .mobile-stack { flex-direction: column; }
+  .mobile-full { width: 100%; }
+  .mobile-text-sm { font-size: 0.875rem; }
+  .mobile-p-4 { padding: 1rem; }
 }

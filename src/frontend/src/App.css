@@ -1,42 +1,190 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+/* .grid-background {
+  background-image: linear-gradient(var(--primary) / 0.1 1px, transparent 1px),
+    linear-gradient(90deg, var(--primary) / 0.1 1px, transparent 1px),
+    radial-gradient(circle at 50% 50%, var(--accent) / 0.05 0%, transparent 50%);
+  background-size: 80px 80px, 80px 80px, 160px 160px;
+  animation: grid-move 40s linear infinite, grid-pulse 8s ease-in-out infinite;
+} */
+
+/* Elegant dot-grid background that gently breathes and radiates */
+.dots-background {
+  /* tunable variables for dot aesthetics */
+  --dot-size: 2px;
+  --dot-gap: 22px;
+
+  background-color: var(--background);
+  background-image: radial-gradient(
+    circle at center,
+    var(--green-400) /
+    60 var(--dot-size),
+    transparent var(--dot-size)
+  );
+  background-size: var(--dot-gap) var(--dot-gap);
+  animation: dots-breathe 4s ease-in-out infinite;
+  position: relative;
+}
+
+/* gentle breathing for the dot layer opacity */
+@keyframes dots-breathe {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* radiating pulse overlay; origin configurable via CSS vars */
+.dots-background::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+      circle at var(--radiate-x, 50%) var(--radiate-y, 50%),
+      var(--accent) /
+      12 0%,
+      transparent 40%
+    ), radial-gradient(circle at var(--radiate-x, 50%) var(--radiate-y, 50%), var(--primary) / 10 0%, transparent 60%);
+  animation: dots-radiate 6s ease-out infinite;
+  mix-blend-mode: multiply;
+}
+
+@keyframes dots-radiate {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.7;
+  }
+  70% {
+    transform: scale(2.0);
+    opacity: 0.15;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+@keyframes grid-move {
+  0% {
+    background-position: 0 0, 0 0, 0 0;
+  }
+  100% {
+    background-position: 80px 80px, 80px 80px, 160px 160px;
+  }
+}
+
+@keyframes grid-pulse {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Styles for the Tab Switcher Component */
+.tab-slider {
+  position: relative;
+  background: var(--card);
+  border-radius: 12px;
+  padding: 4px;
+  border: 1px solid var(--border);
+}
+
+.tab-slider::before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: calc(50% - 4px);
+  height: calc(100% - 8px);
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  border-radius: 8px;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px var(--primary) / 20;
+}
+
+.tab-slider[data-active="extract"]::before {
+  transform: translateX(100%);
+}
+
+.tab-button {
+  position: relative;
+  z-index: 10;
+  flex: 1;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-weight: 500;
   text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.tab-button.active {
+  color: var(--primary-foreground);
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+.tab-button:not(.active) {
+  color: var(--muted-foreground);
+}
+
+.tab-button:not(.active):hover {
+  color: var(--foreground);
+  background: var(--accent) / 0.5;
+}
+
+/* Styles for the Audio Player Component */
+@keyframes placeholder-pulse {
+  0%,
+  100% {
+    opacity: 0.4;
   }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+  50% {
+    opacity: 0.8;
   }
 }
 
-.card {
-  padding: 2em;
+.audio-placeholder {
+  background: linear-gradient(135deg, var(--green-50), var(--green-100));
+  border: 2px dashed var(--green-300);
+  animation: placeholder-pulse 2s infinite;
 }
 
-.read-the-docs {
-  color: #888;
+.audio-placeholder-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: var(--green-600);
+}
+
+/* Styles for the Waveform Animation (part of the Audio Player) */
+.waveform-bar {
+  animation: waveform 1.5s ease-in-out infinite;
+  background: linear-gradient(to top, var(--primary), var(--accent), var(--chart-1));
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.waveform-bar:nth-child(1) { animation-delay: 0s; }
+.waveform-bar:nth-child(2) { animation-delay: 0.1s; }
+.waveform-bar:nth-child(3) { animation-delay: 0.2s; }
+.waveform-bar:nth-child(4) { animation-delay: 0.3s; }
+.waveform-bar:nth-child(5) { animation-delay: 0.4s; }
+.waveform-bar:nth-child(6) { animation-delay: 0.5s; }
+
+@keyframes waveform {
+  0%,
+  100% {
+    height: 6px;
+    opacity: 0.6;
+  }
+  50% {
+    height: 24px;
+    opacity: 1;
+  }
 }
