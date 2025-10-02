@@ -2,12 +2,13 @@ services:
   backend:
     container_name: Tucil2-IF4020-backend
     build:
-      context: ./backend
-      dockerfile: ../Dockerfile.backend
+      context: .                # IMPORTANT: context is project root so we can COPY backend/* in Dockerfile
+      dockerfile: Dockerfile.backend
     ports:
       - "8080:8080"
     volumes:
-      - ./backend:/app
+      - ./backend:/app                  # hot reload backend code
+      - ./vendor/mp3lsbstego:/vendor/mp3lsbstego  # mount vendored lib (private)
     env_file:
       - ./backend/.flaskenv
     restart: always
@@ -17,11 +18,14 @@ services:
     build:
       context: ./frontend
       dockerfile: ../Dockerfile.frontend
+    environment:
+      - VITE_API_BASE=http://localhost:8080     # Frontend → Backend over compose network
+      - CHOKIDAR_USEPOLLING=true              # optional: better file watching in containers
     ports:
       - "5173:5173"
     volumes:
-      - ./frontend:/app
-      - /app/node_modules
+      - ./frontend:/app         # hot reload frontend
+      - /app/node_modules       # keep node_modules in container
     depends_on:
       - backend
     restart: always

@@ -1,12 +1,15 @@
 "use client"
 
 import { useState } from "react"
-import { Download, Key, Play } from "lucide-react"
+import { Download, Key, Play, Lock } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Switch } from "@/components/ui/switch"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { FileUpload } from "@/components/file-upload"
+import { extractApi } from "@/lib/api"
 
 interface ExtractSectionProps {
   audioFile: File | null
@@ -23,84 +26,127 @@ export function ExtractSection({
   onProcessingStart,
   isProcessing,
 }: ExtractSectionProps) {
-  const [stegoKey, setStegoKey] = useState("")
-  const [customFileName, setCustomFileName] = useState("")
+  const [lsbBits, setLsbBits] = useState<string>("4")
+  const [stegoKey, setStegoKey] = useState<string>("")
+  const [useEncryption, setUseEncryption] = useState<boolean>(false)
+  const [customFileName, setCustomFileName] = useState<string>("")
+
+  const bitsPerFrame = Number.parseInt(lsbBits) || 4
 
   const handleExtract = async () => {
-    if (!audioFile || !stegoKey) return
-
+    if (!audioFile) return
     onProcessingStart()
+    try {
+      const { file, filename, size, contentType } = await extractApi({
+        stego: audioFile,
+        bitsPerFrame,
+        key: stegoKey,
+        vigenere: useEncryption, // MUST match what was used during embed
+        saveAs: customFileName || undefined,
+      })
 
-    // Simulate processing with realistic timing
-    setTimeout(() => {
       onResults({
         type: "extract",
-        fileName: customFileName || "secret_document.pdf",
-        fileSize: "2.4 MB",
-        fileType: "PDF Document",
-        extractedAt: new Date().toLocaleString(),
         success: true,
+        fileName: filename,
+        fileSize: `${(size / 1024).toFixed(1)} KB`,
+        fileType: contentType,
+        extractedAt: new Date().toLocaleString(),
+        downloadFile: file,
+        settings: {
+          encryption: useEncryption,
+          lsbBits: bitsPerFrame,
+        },
       })
-    }, 2500)
+    } catch (err: any) {
+      onResults({
+        type: "extract",
+        success: false,
+        error: err?.message || "Extraction failed",
+      })
+    }
   }
 
-  const canExtract = audioFile && stegoKey.length > 0
-
   return (
-    <Card className="border-border bg-card shadow-lg">
+    <Card className="border-primary/20 bg-gradient-to-b from-background via-background to-primary/5">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-primary">
-          <Download className="h-5 w-5" />
-          Extract Secret Message
+        <CardTitle className="flex items-center gap-2">
+          <Download className="h-5 w-5 text-primary" />
+          Extract
         </CardTitle>
-        <CardDescription>Extract hidden files from steganographic MP3 audio files</CardDescription>
+        <CardDescription>Recover a hidden file from a stego MP3</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
-        {/* File Upload */}
+        {/* Stego MP3 */}
         <FileUpload
           label="Stego Audio (MP3)"
-          accept=".mp3"
+          accept=".mp3,audio/mpeg"
           file={audioFile}
           onFileSelect={setAudioFile}
-          icon={<Download className="h-4 w-4" />}
+          icon={<Download className="h-5 w-5" />}
         />
 
-        {audioFile && (
-          <div className="space-y-4 fade-in">
-            <div className="flex items-center gap-2 mb-4">
-              <Key className="h-4 w-4 text-primary" />
-              <Label className="text-base font-medium">Extraction Settings</Label>
+        {/* Settings */}
+        <div className="rounded-lg border p-4 space-y-4">
+          <div className="grid md:grid-cols-3 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="bits">Bits per Frame</Label>
+              <Select value={lsbBits} onValueChange={setLsbBits}>
+                <SelectTrigger id="bits">
+                  <SelectValue placeholder="Select bits per frame" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="1">1</SelectItem>
+                  <SelectItem value="2">2</SelectItem>
+                  <SelectItem value="3">3</SelectItem>
+                  <SelectItem value="4">4</SelectItem>
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-muted-foreground">Must match the embedding settings.</p>
             </div>
 
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="extract-key">Stego Key</Label>
+            <div className="space-y-2">
+              <Label htmlFor="key">Key</Label>
+              <div className="flex items-center gap-2">
+                <Key className="h-4 w-4 text-muted-foreground" />
                 <Input
-                  id="extract-key"
-                  type="password"
-                  placeholder="Enter the same key used for embedding..."
+                  id="key"
+                  placeholder="Key used during embed"
                   value={stegoKey}
                   onChange={(e) => setStegoKey(e.target.value)}
-                  className="bg-input border-border focus:ring-primary"
-                />
-                <p className="text-xs text-muted-foreground">Must match the key used during embedding</p>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="extract-name">Save As (optional)</Label>
-                <Input
-                  id="extract-name"
-                  placeholder="extracted_file"
-                  value={customFileName}
-                  onChange={(e) => setCustomFileName(e.target.value)}
-                  className="bg-input border-border focus:ring-primary"
                 />
               </div>
             </div>
 
+            <div className="flex items-center justify-between rounded-md border p-3">
+              <div className="flex items-center gap-2">
+                <Lock className="h-4 w-4" />
+                <div>
+                  <p className="text-sm font-medium">Vigenère</p>
+                  <p className="text-xs text-muted-foreground">Must match embed</p>
+                </div>
+              </div>
+              <Switch checked={useEncryption} onCheckedChange={setUseEncryption} />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="outname">Output name (optional)</Label>
+            <Input
+              id="outname"
+              placeholder="recovered.bin"
+              value={customFileName}
+              onChange={(e) => setCustomFileName(e.target.value)}
+            />
+          </div>
+        </div>
+
+        {/* Action */}
+        {audioFile && (
+          <div className="grid">
             <Button
               onClick={handleExtract}
-              disabled={!canExtract || isProcessing}
+              disabled={isProcessing}
               className={`w-full bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-200 ${
                 isProcessing ? "pulse-green" : "hover:glow-green"
               }`}

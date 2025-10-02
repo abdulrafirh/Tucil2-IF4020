@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mp3lsbsteg"
+version = "0.1.0"
+description = "MP3 LSB Steganography toolkit with deterministic embedding, capacity tracing, and PSNR metrics"
+readme = "README.md"
+license = "MIT"
+authors = [
+  { name = "abdulrafirh", email = "abdulrafi623@gmail.com" }
+]
+requires-python = ">=3.9"
+keywords = ["mp3", "steganography", "audio", "cryptography", "psnr", "ctf"]
+
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Topic :: Security :: Cryptography",
+  "Topic :: Multimedia :: Sound/Audio",
+]
+
+dependencies = [
+  "pydub>=0.25.1",
+  "numpy>=1.24.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=7.0",
+  "black",
+  "ruff",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["mp3lsbsteg*"]
+exclude = ["tests*"]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]

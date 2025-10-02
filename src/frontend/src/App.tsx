@@ -26,11 +26,12 @@ export default function Home() {
   const handleResults = (newResults: any) => {
     setResults(newResults)
     setIsProcessing(false)
-    if (newResults.success && audioFile) {
-      const processedFile = new File([audioFile], `stego_${audioFile.name}`, {
-        type: audioFile.type,
-      })
-      setProcessedAudio(processedFile)
+
+    // Only show audio player after EMBED, with the actual stego file returned by backend
+    if (newResults?.success && newResults?.type === "embed" && newResults?.stegoFile instanceof File) {
+      setProcessedAudio(newResults.stegoFile)
+    } else {
+      setProcessedAudio(null)
     }
   }
 
