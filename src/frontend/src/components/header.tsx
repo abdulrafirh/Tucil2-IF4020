@@ -22,8 +22,15 @@ export function Header() {
               Docs
             </Button>
             <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
-              <Github className="h-4 w-4 mr-2" />
-              GitHub
+              <a
+                href="https://github.com/abdulrafirh/Tucil2-IF4020"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center"
+              >
+                <Github className="h-4 w-4 mr-2" />
+                GitHub
+              </a>
             </Button>
           </div>
         </div>

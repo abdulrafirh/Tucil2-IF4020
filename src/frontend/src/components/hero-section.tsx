@@ -13,7 +13,7 @@ export function HeroSection() {
       </div>
 
       <div className="grid md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-        <div className="p-6 bg-card rounded-lg border border-border hover:border-primary/50 transition-colors">
+        <div className="p-6 bg-card rounded-lg border border-border shadow-sm hover:border-primary/50 transition-colors">
           <div className="p-3 bg-primary/10 rounded-lg w-fit mx-auto mb-4">
             <Shield className="h-6 w-6 text-primary" />
           </div>
@@ -21,7 +21,7 @@ export function HeroSection() {
           <p className="text-sm text-muted-foreground">1-4 bit LSB encoding for optimal capacity</p>
         </div>
 
-        <div className="p-6 bg-card rounded-lg border border-border hover:border-primary/50 transition-colors">
+        <div className="p-6 bg-card rounded-lg border border-border shadow-sm hover:border-primary/50 transition-colors">
           <div className="p-3 bg-primary/10 rounded-lg w-fit mx-auto mb-4">
             <Lock className="h-6 w-6 text-primary" />
           </div>
@@ -29,7 +29,7 @@ export function HeroSection() {
           <p className="text-sm text-muted-foreground">Extended 256-character encryption</p>
         </div>
 
-        <div className="p-6 bg-card rounded-lg border border-border hover:border-primary/50 transition-colors">
+        <div className="p-6 bg-card rounded-lg border border-border shadow-sm hover:border-primary/50 transition-colors">
           <div className="p-3 bg-primary/10 rounded-lg w-fit mx-auto mb-4">
             <Music className="h-6 w-6 text-primary" />
           </div>
@@ -37,7 +37,7 @@ export function HeroSection() {
           <p className="text-sm text-muted-foreground">Mono & stereo audio processing</p>
         </div>
 
-        <div className="p-6 bg-card rounded-lg border border-border hover:border-primary/50 transition-colors">
+        <div className="p-6 bg-card rounded-lg border border-border shadow-sm hover:border-primary/50 transition-colors">
           <div className="p-3 bg-primary/10 rounded-lg w-fit mx-auto mb-4">
             <Zap className="h-6 w-6 text-primary" />
           </div>

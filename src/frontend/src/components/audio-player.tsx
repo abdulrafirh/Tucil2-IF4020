@@ -110,7 +110,7 @@ export function AudioPlayer({ file, title, psnr }: AudioPlayerProps) {
         </div>
         <CardTitle className="flex items-center justify-between relative z-10 mobile-stack mobile-text-sm">
           <div className="flex items-center gap-3 text-primary">
-            <div className="flex space-x-1 p-2 bg-primary/10 rounded-lg">
+            <div className={`flex space-x-1 p-2 bg-primary/10 rounded-lg ${isPlaying ? "h-10" : ""}`}>
               {[...Array(6)].map((_, i) => (
                 <div
                   key={i}

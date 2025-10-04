@@ -36,7 +36,8 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-background dots-background">
+    <div className="min-h-screen">
+      <div className="dots-background bg-background"></div>
       <Header />
 
       <main className="container mx-auto px-4 py-8 space-y-12">
@@ -45,7 +46,7 @@ export default function Home() {
         <div className="grid lg:grid-cols-2 gap-8">
           <div className="space-y-6">
             <div
-              className={`tab-slider ${activeTab === "extract" ? 'data-[active="extract"]' : ""}`}
+              className={`tab-slider ${activeTab === "extract" ? 'data-[active="extract"]' : ""} shadow-md`}
               data-active={activeTab}
             >
               <div className="flex">
@@ -97,7 +98,7 @@ export default function Home() {
                   <Music className="h-12 w-12 mb-4" />
                   <h3 className="text-lg font-semibold mb-2">Audio Player</h3>
                   <p className="text-sm text-center max-w-xs">
-                    Your processed audio will appear here after embedding or extraction
+                    Your processed audio will appear here after embedding
                   </p>
                 </div>
               </div>
@@ -110,8 +111,6 @@ export default function Home() {
             )}
           </div>
         </div>
-
-        <CreditsSection />
       </main>
     </div>
   )

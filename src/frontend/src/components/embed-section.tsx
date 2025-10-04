@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Upload, Settings, Lock, Play, Zap, Key, Sparkles } from "lucide-react"
+import { Upload, Settings, Lock, Play, Zap, Key, Music } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -80,6 +80,7 @@ export function EmbedSection({
         bitsPerFrame,
         key: stegoKey,
         vigenere: useEncryption,
+        customName: customFileName
       })
 
       onResults({
@@ -105,140 +106,158 @@ export function EmbedSection({
   }
 
   return (
-    <Card className="border-primary/20 bg-gradient-to-b from-background via-background to-primary/5">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Upload className="h-5 w-5 text-primary" />
-          Embed
+    <Card className="border-border bg-card shadow-lg hover-glow transition-all duration-300">
+      <CardHeader className="relative overflow-hidden">
+        <div className="absolute inset-0 opacity-5">
+          <div className="grid-background h-full w-full" />
+        </div>
+        <CardTitle className="flex items-center gap-2 text-primary relative z-10">
+          <div className="p-2 bg-primary/10 rounded-lg">
+            <Upload className="h-5 w-5" />
+          </div>
+          Embed Secret Message
         </CardTitle>
-        <CardDescription>Hide a file inside your MP3 using LSB on sign-bits</CardDescription>
+        <CardDescription className="relative z-10">
+          Hide a file inside your MP3 using LSB Steganography on sign-bits
+        </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
-        {/* Carrier MP3 */}
-        <FileUpload
-          label="Carrier Audio (MP3)"
-          accept=".mp3,audio/mpeg"
-          file={audioFile}
-          onFileSelect={setAudioFile}
-          icon={<MusicNoteIcon />}
-        />
 
-        {/* Secret file */}
-        <FileUpload
-          label="Secret File"
-          accept="*"
-          file={secretFile}
-          onFileSelect={setSecretFile}
-          icon={<Lock className="h-5 w-5" />}
-        />
-
-        {/* Settings */}
-        <div className="rounded-lg border p-4 space-y-4">
-          <div className="flex items-center gap-2">
-            <Settings className="h-5 w-5 text-primary" />
-            <h4 className="font-medium">Settings</h4>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="bits">Bits per Frame</Label>
-              <Select value={lsbBits} onValueChange={setLsbBits}>
-                <SelectTrigger id="bits">
-                  <SelectValue placeholder="Select bits per frame" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="1">1</SelectItem>
-                  <SelectItem value="2">2</SelectItem>
-                  <SelectItem value="3">3</SelectItem>
-                  <SelectItem value="4">4</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="key">Key</Label>
-              <div className="flex items-center gap-2">
-                <Key className="h-4 w-4 text-muted-foreground" />
-                <Input
-                  id="key"
-                  placeholder="Optional key"
-                  value={stegoKey}
-                  onChange={(e) => setStegoKey(e.target.value)}
-                />
-              </div>
-              <p className="text-xs text-muted-foreground">Used for deterministic selection and (optionally) Vigenère</p>
-            </div>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-4">
-            <div className="flex items-center justify-between rounded-md border p-3">
-              <div className="flex items-center gap-2">
-                <Lock className="h-4 w-4" />
-                <div>
-                  <p className="text-sm font-medium">Vigenère</p>
-                  <p className="text-xs text-muted-foreground">Repeating-key XOR</p>
-                </div>
-              </div>
-              <Switch checked={useEncryption} onCheckedChange={setUseEncryption} />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="filename">Output name (optional)</Label>
-              <Input
-                id="filename"
-                placeholder="stego.mp3"
-                value={customFileName}
-                onChange={(e) => setCustomFileName(e.target.value)}
-              />
-            </div>
-          </div>
+        <div className="slide-left fade-in-delay">
+          {/* Carrier MP3 */}
+          <FileUpload
+            label="Carrier Audio (MP3)"
+            accept=".mp3,audio/mpeg"
+            file={audioFile}
+            onFileSelect={setAudioFile}
+            icon={<Music className="h-5 w-5 text-primary"/>}
+          />
         </div>
 
-        {/* Actions */}
-        {audioFile && secretFile && (
-          <div className="grid md:grid-cols-2 gap-3">
-            <Button
-              onClick={handleCheckCapacity}
-              variant="secondary"
-              disabled={isProcessing}
-              className={`w-full ${isProcessing ? "opacity-70 cursor-not-allowed" : ""}`}
-            >
-              <Zap className="h-4 w-4 mr-2" />
-              Check Capacity
-            </Button>
+        <div className="slide-left fade-in-delay delay-1000">
+          {/* Secret file */}
+          <FileUpload
+            label="Secret File"
+            accept="*"
+            file={secretFile}
+            onFileSelect={setSecretFile}
+            icon={<Lock className="h-5 w-5 text-primary"/>}
+          />
+        </div>
 
-            <Button
-              onClick={handleEmbed}
-              disabled={isProcessing}
-              className={`w-full bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-200 ${
-                isProcessing ? "pulse-green" : "hover:glow-green"
-              }`}
-              size="lg"
-            >
-              {isProcessing ? (
-                <>
-                  <Sparkles className="h-5 w-5 animate-pulse" />
-                  <span>Embedding…</span>
-                </>
-              ) : (
-                <>
-                  <Sparkles className="h-5 w-5" />
-                  <span>Embed Secret Message</span>
-                  <Play className="h-4 w-4" />
-                </>
-              )}
-            </Button>
+        {audioFile && secretFile && (
+          <div className="space-y-6 slide-down fade-in-delay delay-2000">
+            <div className="rounded-lg border p-4 space-y-4 shadow-sm">
+              <div className="flex items-center gap-3 mb-4 p-4 bg-primary/5 rounded-xl border border-primary/20">
+                <div className="p-2 bg-primary/10 rounded-lg">
+                  <Settings className="h-4 w-4 text-primary animate-[spin_6000ms_linear_infinite]" />
+                </div>
+                <Label className="text-base font-semibold text-primary">Steganography Settings</Label>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="stego-key" className="flex items-center gap-2 font-medium">
+                    <Key className="h-4 w-4 text-primary" />
+                    Stego Key
+                  </Label>
+                  <div className="flex items-center gap-2">
+                    <Input
+                      id="key"
+                      placeholder="Optional Secret Key"
+                      value={stegoKey}
+                      onChange={(e) => setStegoKey(e.target.value)}
+                      className="bg-input border-border focus:ring-primary focus:border-primary transition-all duration-200 hover-glow"
+                    />
+                  </div>
+                  <p className="text-xs text-muted-foreground">Used for random positioning and Vigenère</p>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="lsb-bits" className="flex items-center gap-2 font-medium">
+                    <Zap className="h-4 w-4 text-primary" />
+                    LSB Bits
+                  </Label>
+                  <Select value={lsbBits} onValueChange={setLsbBits}>
+                    <SelectTrigger id="bits" className="bg-input border-border focus:ring-primary hover-glow transition-all duration-200">
+                      <SelectValue placeholder="Select bits per frame" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="1">1 bit (Highest quality)</SelectItem>
+                      <SelectItem value="2">2 bits (Balanced)</SelectItem>
+                      <SelectItem value="3">3 bits (More capacity)</SelectItem>
+                      <SelectItem value="4">4 bits (Maximum capacity)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="col-span-2 flex items-center justify-between p-4 bg-gradient-to-r from-primary/5 to-accent/5 rounded-xl border border-primary/20 hover-lift transition-all duration-300">
+                <div className="flex items-center space-x-3">
+                  <div className="p-2 bg-primary/10 rounded-lg">
+                    <Lock className="h-4 w-4 text-primary" />
+                  </div>
+                  <div>
+                    <Label htmlFor="encryption" className="font-medium text-foreground">
+                      Vigenère Encryption
+                    </Label>
+                    <p className="text-xs text-muted-foreground">Encrypt secret data before embedding</p>
+                  </div>
+                </div>
+                <Switch checked={useEncryption} onCheckedChange={setUseEncryption} className="data-[state=checked]:bg-primary"/>
+              </div>
+
+              <div className="col-span-2 space-y-2">
+                <Label htmlFor="custom-name" className="font-medium">
+                  Output File Name (optional)
+                </Label>
+                <Input
+                  id="filename"
+                  placeholder="stego_output.mp3"
+                  value={customFileName}
+                  onChange={(e) => setCustomFileName(e.target.value)}
+                  className="bg-input border-border focus:ring-primary focus:border-primary transition-all duration-200 hover-glow"
+                />
+              </div>
+            </div>
+            
+            <div className="grid md:grid-cols-2 gap-3">
+              <Button
+                onClick={handleCheckCapacity}
+                variant="secondary"
+                disabled={isProcessing}
+                className={`text-foreground w-full font-semibold py-4 text-lg relative overflow-hidden transition-all duration-300  ${
+                  isProcessing ? "opacity-70 animate-pulse cursor-not-allowed" : "hover-lift"
+                }`}
+              >
+                <Zap className="h-4 w-4 mr-2" />
+                Check Capacity
+              </Button>
+
+              <Button
+                onClick={handleEmbed}
+                disabled={isProcessing}
+                className={`btn-creative w-full text-primary-foreground font-semibold py-4 text-lg relative overflow-hidden transition-all duration-300 ${
+                  isProcessing ? "pulse-green animate-pulse" : "hover-lift"
+                }`}
+                size="lg"
+              >
+                {isProcessing ? (
+                  <>
+                    <Play className="h-5 w-5 animate-pulse" />
+                    <span>Embedding…</span>
+                  </>
+                ) : (
+                  <>
+                    <Play className="h-5 w-5" />
+                    <span>Embed Secret Message</span>
+                  </>
+                )}
+              </Button>
+            </div>
           </div>
         )}
       </CardContent>
     </Card>
-  )
-}
-
-function MusicNoteIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="h-5 w-5 text-primary" fill="currentColor">
-      <path d="M12 3v10.55A4 4 0 1 1 10 17V7h8V3h-6z" />
-    </svg>
   )
 }

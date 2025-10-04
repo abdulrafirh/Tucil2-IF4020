@@ -1,38 +1,16 @@
-/* .grid-background {
-  background-image: linear-gradient(var(--primary) / 0.1 1px, transparent 1px),
-    linear-gradient(90deg, var(--primary) / 0.1 1px, transparent 1px),
-    radial-gradient(circle at 50% 50%, var(--accent) / 0.05 0%, transparent 50%);
-  background-size: 80px 80px, 80px 80px, 160px 160px;
-  animation: grid-move 40s linear infinite, grid-pulse 8s ease-in-out infinite;
-} */
-
 /* Elegant dot-grid background that gently breathes and radiates */
 .dots-background {
-  /* tunable variables for dot aesthetics */
-  --dot-size: 2px;
-  --dot-gap: 22px;
+  --dot-size: 4px;
+  --dot-gap: 60px;
+
+  position: fixed;    
+  inset: 0;            
+  z-index: -1;         
 
   background-color: var(--background);
-  background-image: radial-gradient(
-    circle at center,
-    var(--green-400) /
-    60 var(--dot-size),
-    transparent var(--dot-size)
-  );
+  background-image: radial-gradient(circle, oklch(0.35 0.18 140 / 0.2) var(--dot-size), transparent calc(var(--dot-size) + 1px));
   background-size: var(--dot-gap) var(--dot-gap);
-  animation: dots-breathe 4s ease-in-out infinite;
-  position: relative;
-}
-
-/* gentle breathing for the dot layer opacity */
-@keyframes dots-breathe {
-  0%,
-  100% {
-    opacity: 0.6;
-  }
-  50% {
-    opacity: 1;
-  }
+  animation: grid-move 60s linear infinite;
 }
 
 /* radiating pulse overlay; origin configurable via CSS vars */
@@ -40,12 +18,13 @@
   content: "";
   position: fixed;
   inset: 0;
+  z-index: -1;
   pointer-events: none;
   background: radial-gradient(
       circle at var(--radiate-x, 50%) var(--radiate-y, 50%),
       var(--accent) /
       12 0%,
-      transparent 40%
+      transparent 60%
     ), radial-gradient(circle at var(--radiate-x, 50%) var(--radiate-y, 50%), var(--primary) / 10 0%, transparent 60%);
   animation: dots-radiate 6s ease-out infinite;
   mix-blend-mode: multiply;
@@ -53,15 +32,15 @@
 
 @keyframes dots-radiate {
   0% {
-    transform: scale(0.85);
-    opacity: 0.7;
+    transform: scale(0.8);
+    opacity: 0.8;
   }
   70% {
     transform: scale(2.0);
-    opacity: 0.15;
+    opacity: 0.2;
   }
   100% {
-    transform: scale(2.4);
+    transform: scale(2.5);
     opacity: 0;
   }
 }
@@ -72,16 +51,6 @@
   }
   100% {
     background-position: 80px 80px, 80px 80px, 160px 160px;
-  }
-}
-
-@keyframes grid-pulse {
-  0%,
-  100% {
-    opacity: 0.3;
-  }
-  50% {
-    opacity: 0.6;
   }
 }
 

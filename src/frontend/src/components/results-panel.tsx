@@ -74,7 +74,7 @@ export function ResultsPanel({ results, isProcessing }: ResultsPanelProps) {
   // Processing state
   if (isProcessing) {
     return (
-      <Card className="border-primary/20">
+      <Card className="border-primary/20 slide-down">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Loader2 className="h-5 w-5 animate-spin text-primary" />

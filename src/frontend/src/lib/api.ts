@@ -7,6 +7,7 @@ export async function embedApi(params: {
   bitsPerFrame: number;
   key: string;
   vigenere: boolean;
+  customName: string;
 }) {
   const fd = new FormData();
   fd.append("carrier", params.carrier);
@@ -23,7 +24,7 @@ export async function embedApi(params: {
 
   const blob = await res.blob();
   // Prefer a friendly filename; make sure it ends with .mp3
-  const name = `stego_${params.carrier.name.endsWith(".mp3") ? params.carrier.name : params.carrier.name + ".mp3"}`;
+  const name = params.customName ? params.customName : `stego_${params.carrier.name.endsWith(".mp3") ? params.carrier.name : params.carrier.name + ".mp3"}`;
   const stegoFile = new File([blob], name, { type: "audio/mpeg" });
 
   return {

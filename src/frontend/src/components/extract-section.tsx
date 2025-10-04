@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Download, Key, Play, Lock } from "lucide-react"
+import { Download, Key, Play, Lock, Music, Zap } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -68,95 +68,125 @@ export function ExtractSection({
   }
 
   return (
-    <Card className="border-primary/20 bg-gradient-to-b from-background via-background to-primary/5">
+    <Card className="border-border bg-card shadow-lg">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Download className="h-5 w-5 text-primary" />
-          Extract
+        <CardTitle className="flex items-center gap-2 text-primary">
+          <div className="p-2 bg-primary/10 rounded-lg">
+            <Download className="h-5 w-5" />
+          </div>
+          Extract Secret Message
         </CardTitle>
-        <CardDescription>Recover a hidden file from a stego MP3</CardDescription>
+        <CardDescription>Recover a hidden file from a steganography embedded MP3</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
+
         {/* Stego MP3 */}
-        <FileUpload
-          label="Stego Audio (MP3)"
-          accept=".mp3,audio/mpeg"
-          file={audioFile}
-          onFileSelect={setAudioFile}
-          icon={<Download className="h-5 w-5" />}
-        />
+        <div className="slide-right fade-in-delay">
+          <FileUpload
+            label="Stego Audio (MP3)"
+            accept=".mp3,audio/mpeg"
+            file={audioFile}
+            onFileSelect={setAudioFile}
+            icon={<Music className="h-5 w-5 text-primary"/>}
+          />
+        </div>
 
-        {/* Settings */}
-        <div className="rounded-lg border p-4 space-y-4">
-          <div className="grid md:grid-cols-3 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="bits">Bits per Frame</Label>
-              <Select value={lsbBits} onValueChange={setLsbBits}>
-                <SelectTrigger id="bits">
-                  <SelectValue placeholder="Select bits per frame" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="1">1</SelectItem>
-                  <SelectItem value="2">2</SelectItem>
-                  <SelectItem value="3">3</SelectItem>
-                  <SelectItem value="4">4</SelectItem>
-                </SelectContent>
-              </Select>
-              <p className="text-xs text-muted-foreground">Must match the embedding settings.</p>
+        {audioFile && (
+        <div className="space-y-6 slide-down fade-in-delay delay-1000">
+          <div className="rounded-lg border p-4 space-y-4 shadow-sm">
+            <div className="flex items-center gap-3 mb-4 p-4 bg-primary/5 rounded-xl border border-primary/20">
+              <div className="p-2 bg-primary/10 rounded-lg">
+                <Key className="h-4 w-4 text-primary animate-[rotate-wave_6s_ease-in-out_infinite]" />
+              </div>
+              <Label className="text-base font-semibold text-primary">Extraction Settings</Label>
             </div>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                  <Label htmlFor="stego-key" className="flex items-center gap-2 font-medium">
+                    <Key className="h-4 w-4 text-primary" />
+                    Stego Key
+                  </Label>
+                  <Input
+                    id="key"
+                    placeholder="Key used during embedding"
+                    value={stegoKey}
+                    onChange={(e) => setStegoKey(e.target.value)}
+                    className="bg-input border-border focus:ring-primary focus:border-primary transition-all duration-200 hover-glow"
+                  />
+              </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="key">Key</Label>
-              <div className="flex items-center gap-2">
-                <Key className="h-4 w-4 text-muted-foreground" />
+              <div className="space-y-2">
+                <Label htmlFor="lsb-bits" className="flex items-center gap-2 font-medium">
+                  <Zap className="h-4 w-4 text-primary" />
+                  LSB Bits
+                </Label>
+                <Select value={lsbBits} onValueChange={setLsbBits}>
+                  <SelectTrigger id="bits" className="bg-input border-border focus:ring-primary hover-glow transition-all duration-200">
+                    <SelectValue placeholder="Select bits per frame" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="1">1 bit (Highest quality)</SelectItem>
+                    <SelectItem value="2">2 bits (Balanced)</SelectItem>
+                    <SelectItem value="3">3 bits (More capacity)</SelectItem>
+                    <SelectItem value="4">4 bits (Maximum capacity)</SelectItem>
+                  </SelectContent>
+                </Select>
+                <p className="text-xs text-muted-foreground">Must match the embedding settings.</p>
+              </div>
+
+              <div className="col-span-2 flex items-center justify-between p-4 bg-gradient-to-r from-primary/5 to-accent/5 rounded-xl border border-primary/20 hover-lift transition-all duration-300">
+                <div className="flex items-center space-x-3">
+                  <div className="p-2 bg-primary/10 rounded-lg">
+                    <Lock className="h-4 w-4 text-primary" />
+                  </div>
+                  <div>
+                    <Label className="font-medium text-foreground">
+                      Vigenère Encryption
+                    </Label>
+                    <p className="text-xs text-muted-foreground">For already Encrypted Secret Data using the same key for steganography</p>
+                  </div>
+                </div>
+                <Switch checked={useEncryption} onCheckedChange={setUseEncryption} className="data-[state=checked]:bg-primary"/>
+              </div>
+
+              <div className="col-span-2 space-y-2">
+                <Label htmlFor="outname" className="font-medium">
+                  Extracted File Name (optional)
+                </Label>
                 <Input
-                  id="key"
-                  placeholder="Key used during embed"
-                  value={stegoKey}
-                  onChange={(e) => setStegoKey(e.target.value)}
+                  id="outname"
+                  placeholder="stego_message.txt"
+                  value={customFileName}
+                  onChange={(e) => setCustomFileName(e.target.value)}
+                  className="bg-input border-border focus:ring-primary focus:border-primary transition-all duration-200 hover-glow"
                 />
               </div>
             </div>
-
-            <div className="flex items-center justify-between rounded-md border p-3">
-              <div className="flex items-center gap-2">
-                <Lock className="h-4 w-4" />
-                <div>
-                  <p className="text-sm font-medium">Vigenère</p>
-                  <p className="text-xs text-muted-foreground">Must match embed</p>
-                </div>
-              </div>
-              <Switch checked={useEncryption} onCheckedChange={setUseEncryption} />
-            </div>
           </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="outname">Output name (optional)</Label>
-            <Input
-              id="outname"
-              placeholder="recovered.bin"
-              value={customFileName}
-              onChange={(e) => setCustomFileName(e.target.value)}
-            />
-          </div>
-        </div>
-
-        {/* Action */}
-        {audioFile && (
-          <div className="grid">
+          <div className="flex justify-end">
             <Button
               onClick={handleExtract}
               disabled={isProcessing}
-              className={`w-full bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-200 ${
-                isProcessing ? "pulse-green" : "hover:glow-green"
-              }`}
+              className={`btn-creative w-1/2 text-primary-foreground font-semibold py-4 text-lg relative overflow-hidden transition-all duration-300 ${
+                  isProcessing ? "pulse-green animate-pulse" : "hover-lift"
+                }`}
               size="lg"
             >
-              <Play className="h-4 w-4 mr-2" />
-              {isProcessing ? "Extracting..." : "Extract Secret Message"}
+              {isProcessing ? (
+                  <>
+                    <Play className="h-5 w-5 animate-pulse" />
+                    <span>Extracting…</span>
+                  </>
+                ) : (
+                  <>
+                    <Play className="h-5 w-5" />
+                    <span>Extract Secret Message</span>
+                  </>
+                )}
             </Button>
           </div>
-        )}
+        </div>
+      )}
       </CardContent>
     </Card>
   )
