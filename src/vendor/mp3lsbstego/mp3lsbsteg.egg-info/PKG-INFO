@@ -1,0 +1,18 @@
+Metadata-Version: 2.4
+Name: mp3lsbsteg
+Version: 0.1.0
+Summary: MP3 LSB Steganography toolkit with deterministic embedding, capacity tracing, and PSNR metrics
+Author-email: abdulrafirh <abdulrafi623@gmail.com>
+License-Expression: MIT
+Keywords: mp3,steganography,audio,cryptography,psnr,ctf
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Security :: Cryptography
+Classifier: Topic :: Multimedia :: Sound/Audio
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+Requires-Dist: pydub>=0.25.1
+Requires-Dist: numpy>=1.24.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0; extra == "dev"
+Requires-Dist: black; extra == "dev"
+Requires-Dist: ruff; extra == "dev"

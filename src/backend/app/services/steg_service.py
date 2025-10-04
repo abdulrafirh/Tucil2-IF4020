@@ -6,17 +6,17 @@ from mp3lsbsteg.stego.payload import HEADER_SIZE
 import io
 import math
 
-# Hardcoded selection settings (per your request)
+# Hardcoded selection settings
 FRACTION = 1.0
-MASK_PCTL = 0.60
-MAX_FRAMES = None  # don't customize
+MASK_PCTL = 0.75
+MAX_FRAMES = None  
 
 def _parse_bpf(raw: Optional[str], default: int = 4) -> int:
     try:
         bpf = int(raw) if raw is not None else default
     except ValueError:
         raise ValueError("bits_per_frame must be an integer")
-    if not (1 <= bpf <= 8):  # library typically uses 1..4, but allow up to 8 if supported
+    if not (1 <= bpf <= 8):  
         raise ValueError("bits_per_frame must be between 1 and 8")
     return bpf
 
@@ -75,7 +75,7 @@ def extract_payload(
 def estimate_capacity_bytes(*, carrier_bytes: bytes, bits_per_frame: int) -> dict:
     """
     Returns capacity metrics for the given carrier and settings.
-    fraction=1.0, mask_percentile=0.60, max_frames=None are hardcoded.
+    fraction=1.0, mask_percentile=0.90, max_frames=None are hardcoded.
     """
     cap_bits = api.estimate_capacity(
         carrier_bytes,
