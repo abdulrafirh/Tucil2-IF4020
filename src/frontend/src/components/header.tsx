@@ -18,8 +18,15 @@ export function Header() {
 
           <div className="flex items-center space-x-4">
             <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
-              <FileAudio className="h-4 w-4 mr-2" />
-              Docs
+              <a
+                href="https://github.com/abdulrafirh/Tucil2-IF4020/blob/main/doc/13522037_13522089_Tucil2_IF4020.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center"
+              >
+                <FileAudio className="h-4 w-4 mr-2" />
+                Docs
+              </a>
             </Button>
             <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
               <a
